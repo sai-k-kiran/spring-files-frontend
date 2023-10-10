@@ -1,9 +1,8 @@
-import Sidebar from './components/shared/sidebar.jsx'
+import Sidebar from './components/shared/sidebar'
 import './App.css'
 import { useEffect, useState } from 'react'
 import { getCustomers } from './services/client.js'
 import { Spinner, Text } from '@chakra-ui/react'
-import Card from './components/card.jsx'
 
 const App = () => {
   const [customers, setCustomers] = useState([])

@@ -3,7 +3,6 @@ import {
   Flex,
   Avatar,
   HStack,
-  Text,
   IconButton,
   Button,
   Menu,
@@ -19,7 +18,8 @@ import {
 } from '@chakra-ui/react'
 import { HamburgerIcon, CloseIcon, AddIcon } from '@chakra-ui/icons'
 import Card from '../card'
-import { Children } from 'react'
+import ModalForm from '../Modal'
+import { useState } from 'react'
 
 const Links = ['Dashboard', 'Projects', 'Team']
 
@@ -41,7 +41,9 @@ const NavLink = ({children}) => {
 }
 
 export default function Sidebar({customer}) {
+  
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const [overlay, setOverlay] = useState(false)
 
   return (
     <>
@@ -64,12 +66,17 @@ export default function Sidebar({customer}) {
           </HStack>
           <Flex alignItems={'center'}>
             <Button
+              onClick = {() => {
+                setOverlay(true)
+                onOpen()
+              }}
               variant={'solid'}
               colorScheme={'teal'}
               size={'sm'}
               mr={4}
-              leftIcon={<AddIcon />}>
-              Action
+              leftIcon={<AddIcon />
+             }>
+                Add Customer
             </Button>
             <Menu>
               <MenuButton
@@ -109,12 +116,13 @@ export default function Sidebar({customer}) {
       <Box p={4}>
         <Wrap columns={2} spacing='50px' justify='center'>
           {customer.map((c) => (
-            <WrapItem>
-              <Card customer={c} key={c.id} />
+            <WrapItem key={c.id}>
+              <Card customer={c} />
             </WrapItem>
           ))}
         </Wrap>
       </Box>
+      <ModalForm isOpen={isOpen} overlay={overlay} onClose={onClose} />
     </>
   )
 }
