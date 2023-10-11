@@ -3,10 +3,8 @@ import {
     ModalOverlay,
     ModalContent,
     ModalHeader,
-    ModalFooter,
     ModalBody,
     ModalCloseButton,
-    Button,
     FormControl,
     FormLabel,
     Input,
@@ -16,15 +14,68 @@ import {
     NumberIncrementStepper,
     NumberDecrementStepper,
     Radio, RadioGroup,
-    Stack
+    Stack,
+    Button,
+    Flex,
+    FormErrorMessage
   } from '@chakra-ui/react'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
-function ModalForm({isOpen, onClose, overlay}) {
+const ModalForm = ({isOpen, onClose, overlay}) => {
+    const [values, setValues] = useState({name : "", email : "", age : 10, gender : ''})
+    const [error, setError] = useState(null);
+
+    function isValidEmail(email) {
+      if(email.length != 0)
+          return /\S+@\S+\.\S+/.test(email);
+      return true
+    }
+    const errorStyle = {
+      color: "rgb(229, 62, 62)",
+      fontSize: "14px",
+      marginTop: "7px"
+    };
+    
+    const setname = (e) => {
+      setValues((values) => ({ ...values, name: e.target.value }));
+    }
+    const setemail = (e) => {
+      if(!isValidEmail(e.target.value)) {
+        setError('Email is invalid')
+      } else {
+        setError(null);
+        setInValid(false)
+      }
+      setValues((values) => ({ ...values, email: e.target.value }))
+    }
+    const setage = (val) => {
+      setValues((values) => ({ ...values, age: val }));
+    }
+    const setgender = (val) => {
+      setValues((values) => ({ ...values, gender: val }));
+    }
+
+    const con = () => {
+      console.log(values.name, values.email, values.age, values.gender)
+    }
+
     const initialRef = useRef(null)
     const finalRef = useRef(null)
-    const [value, setValue] = useState('1')
-  
+
+    const [nameActive, setNameActive] = useState(false)
+    const [emailActive, setEmailActive] = useState(false)
+    const [invalid, setInValid] = useState(true)
+
+    const setActive = (val) => {
+      if(val == "name") setNameActive(true)
+      else if(val == "email") setEmailActive(true)
+    }
+
+    useEffect(() => {
+      if(values.name != "" && values.email != "" && isValidEmail(values.email)) setInValid(false)
+      else setInValid(true)
+    }, [values.name, values.email])
+ 
     return (
       <>
         <Modal isCentered isOpen={isOpen} onClose={onClose}>
@@ -37,19 +88,37 @@ function ModalForm({isOpen, onClose, overlay}) {
             <ModalHeader>Create your account</ModalHeader>
             <ModalCloseButton />
             <ModalBody pb={6}>
-                <FormControl>
+                <FormControl isRequired isInvalid={values.name.length == 0 && nameActive}>
                     <FormLabel>Full name</FormLabel>
-                    <Input ref={initialRef} placeholder='Full Name' />
+                    <Input ref={initialRef} placeholder='Full Name' value={values.name} 
+                    onChange={(e) => setname(e)} onClick={() => setActive("name")}/>
+                    {(values.name.length == 0 && nameActive) ?(
+                      <FormErrorMessage>
+                        Name is required
+                      </FormErrorMessage>
+                    ) : ''}
                 </FormControl>
 
-                <FormControl mt={4}>
+                <FormControl mt={4} isRequired isInvalid={values.email.length == 0 && emailActive}>
                     <FormLabel>Email</FormLabel>
-                    <Input placeholder='Email' />
+                    <Input placeholder='Email' type='email' value={values.email} 
+                    onChange={(e) => setemail(e)} onClick={() => setActive("email")}/>
+                       <p style={errorStyle}>
+                        {error}
+                      </p>
+                    {(values.email.length == 0 && emailActive) ? (
+                      <FormErrorMessage>
+                        Email is required
+                      </FormErrorMessage>
+                    ) : ''}
+                      
+                    
                 </FormControl>
                 <FormControl mt={4}>
                     <FormLabel>Age</FormLabel>
-                    <NumberInput size='md' maxW={80} defaultValue={15} min={10}>
-                        <NumberInputField />
+                    <NumberInput size='md' maxW={80} defaultValue={15} min={10} 
+                      onChange={(val) => setage(val)}>
+                        <NumberInputField  />
                         <NumberInputStepper>
                         <NumberIncrementStepper />
                         <NumberDecrementStepper />
@@ -59,17 +128,20 @@ function ModalForm({isOpen, onClose, overlay}) {
                 
                 <FormControl mt={4}>
                     <FormLabel>Gender</FormLabel>
-                    <RadioGroup onChange={setValue} value={value}>
+                    <RadioGroup onChange={(val) => setgender(val)} value={values.gender}>
                         <Stack direction='row'>
                             <Radio value='1'>Male</Radio>
                             <Radio value='2'>Female</Radio>
                         </Stack>
                     </RadioGroup>
                 </FormControl>
+                <FormControl mt={4}>
+                <Flex alignItems='center' justifyContent='center'>
+                    <Button colorScheme='blue' type='submit'
+                    isDisabled={invalid} onClick={con}>Submit</Button>
+                </Flex>
+                </FormControl>
             </ModalBody>
-            <ModalFooter>
-              <Button onClick={onClose}>Close</Button>
-            </ModalFooter>
           </ModalContent>
         </Modal>
       </>
