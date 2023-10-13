@@ -20,8 +20,10 @@ import {
     FormErrorMessage
   } from '@chakra-ui/react'
 import { useEffect, useRef, useState } from 'react'
+import { saveCustomer } from '../services/client';
+import { successNotification, errorNotification } from '../services/Notification';
 
-const ModalForm = ({isOpen, onClose, overlay}) => {
+const CreateCustomerModal = ({isOpen, onClose, overlay, fetchCustomers}) => {
     const [values, setValues] = useState({name : "", email : "", age : 10, gender : ''})
     const [error, setError] = useState(null);
 
@@ -55,12 +57,7 @@ const ModalForm = ({isOpen, onClose, overlay}) => {
       setValues((values) => ({ ...values, gender: val }));
     }
 
-    const con = () => {
-      console.log(values.name, values.email, values.age, values.gender)
-    }
-
-    const initialRef = useRef(null)
-    const finalRef = useRef(null)
+    const [submitting, setSubmitting] = useState(false)
 
     const [nameActive, setNameActive] = useState(false)
     const [emailActive, setEmailActive] = useState(false)
@@ -90,7 +87,7 @@ const ModalForm = ({isOpen, onClose, overlay}) => {
             <ModalBody pb={6}>
                 <FormControl isRequired isInvalid={values.name.length == 0 && nameActive}>
                     <FormLabel>Full name</FormLabel>
-                    <Input ref={initialRef} placeholder='Full Name' value={values.name} 
+                    <Input placeholder='Full Name' value={values.name} 
                     onChange={(e) => setname(e)} onClick={() => setActive("name")}/>
                     {(values.name.length == 0 && nameActive) ?(
                       <FormErrorMessage>
@@ -130,15 +127,34 @@ const ModalForm = ({isOpen, onClose, overlay}) => {
                     <FormLabel>Gender</FormLabel>
                     <RadioGroup onChange={(val) => setgender(val)} value={values.gender}>
                         <Stack direction='row'>
-                            <Radio value='1'>Male</Radio>
-                            <Radio value='2'>Female</Radio>
+                            <Radio value='0'>Male</Radio>
+                            <Radio value='1'>Female</Radio>
                         </Stack>
                     </RadioGroup>
                 </FormControl>
                 <FormControl mt={4}>
                 <Flex alignItems='center' justifyContent='center'>
                     <Button colorScheme='blue' type='submit'
-                    isDisabled={invalid} onClick={con}>Submit</Button>
+                    isDisabled={invalid} onClick={() => {
+                     setSubmitting(true)
+                      saveCustomer(values)
+                        .then(res => {
+                           successNotification(
+                            "Customer created successfully",
+                             `${values.name} is added`
+                           )
+                            fetchCustomers()
+                        }).catch(err => {
+                          errorNotification(
+                            "An error occured while creating the customer",
+                             `Error: ${err.response.data.message}`
+                           )
+                        }).finally(() => {
+                          setSubmitting(false)
+                          onClose()
+                        })
+                      console.log(JSON.stringify(values))
+                    }}>Submit</Button>
                 </Flex>
                 </FormControl>
             </ModalBody>
@@ -148,4 +164,4 @@ const ModalForm = ({isOpen, onClose, overlay}) => {
     )
   }
 
-export default ModalForm
+export default CreateCustomerModal

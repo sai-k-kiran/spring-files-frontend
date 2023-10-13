@@ -8,3 +8,35 @@ export const getCustomers = async () => {
         throw err
     }
 }
+
+export const saveCustomer = async (customer) => {
+    try{
+        return await axios.post(
+            `${import.meta.env.VITE_API_BASE_URL}/api/v1/customers`,
+            customer
+            )
+    }
+    catch(err){
+        console.log(err)
+    }
+}
+
+export const deleteCustomer = async (id) => {
+    try{
+        return await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/api/v1/customers/${id}`)
+    }
+    catch (err){
+        throw err
+    }
+}
+
+export const updateCustomer = async (id) => {
+    try{
+        return await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/api/v1/customers/${id}`,
+        customer        
+        )
+    }
+    catch (err){
+        throw err
+    }
+}

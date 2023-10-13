@@ -14,16 +14,18 @@ import {
   useColorModeValue,
   Stack,
   Wrap,
-  WrapItem
+  WrapItem,
+  Text
 } from '@chakra-ui/react'
 import { HamburgerIcon, CloseIcon, AddIcon } from '@chakra-ui/icons'
 import Card from '../card'
-import ModalForm from '../Modal'
-import { useState } from 'react'
+import CreateCustomerModal from '../CreateCustomerModal'
+import { useState, useRef } from 'react'
 
 const Links = ['Dashboard', 'Projects', 'Team']
 
 const NavLink = ({children}) => {
+
   return (
     <Box
       as="a"
@@ -40,7 +42,7 @@ const NavLink = ({children}) => {
   )
 }
 
-export default function Sidebar({customer}) {
+export default function Sidebar({customer, fetchCustomers}) {
   
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [overlay, setOverlay] = useState(false)
@@ -115,14 +117,20 @@ export default function Sidebar({customer}) {
 
       <Box p={4}>
         <Wrap columns={2} spacing='50px' justify='center'>
-          {customer.map((c) => (
-            <WrapItem key={c.id}>
-              <Card customer={c} />
-            </WrapItem>
-          ))}
+          {customer.length == 0 ? <Text>No customers available</Text> : ""}
+          {customer.length != 0 && customer.map((c) => (
+              <WrapItem key={c.id}>
+                <Card customer={c} fetchCustomers={fetchCustomers}/>
+              </WrapItem>
+            ))}
         </Wrap>
       </Box>
-      <ModalForm isOpen={isOpen} overlay={overlay} onClose={onClose} />
+      <CreateCustomerModal
+       isOpen={isOpen} 
+      overlay={overlay} 
+      onClose={onClose} 
+      fetchCustomers={fetchCustomers}/>
+      
     </>
   )
 }

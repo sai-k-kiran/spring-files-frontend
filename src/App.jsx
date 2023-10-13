@@ -2,13 +2,13 @@ import Sidebar from './components/shared/sidebar'
 import './App.css'
 import { useEffect, useState } from 'react'
 import { getCustomers } from './services/client.js'
-import { Spinner, Text } from '@chakra-ui/react'
+import { Spinner } from '@chakra-ui/react'
 
 const App = () => {
   const [customers, setCustomers] = useState([])
   const [loading, setLoading] = useState(false)
 
-  useEffect(() => {
+  const fetchCustomers = () => {
     setLoading(true)
     getCustomers().then(res => {
       setCustomers(res.data)
@@ -17,6 +17,10 @@ const App = () => {
     }).finally(() => {
       setLoading(false)
     })
+  }
+
+  useEffect(() => {
+    fetchCustomers()
   }, [])
 
   if(loading){
@@ -33,7 +37,7 @@ const App = () => {
   
   return(
     <div className = "App">
-       <Sidebar customer={customers} />
+       <Sidebar customer={customers} fetchCustomers={fetchCustomers}/>
     </div>
   )
 }
