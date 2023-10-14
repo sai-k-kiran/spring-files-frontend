@@ -16,8 +16,7 @@ import {
     Radio, RadioGroup,
     Stack,
     Button,
-    Flex,
-    FormErrorMessage
+    Flex
   } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { updateCustomer } from '../services/client';
@@ -59,8 +58,6 @@ const UpdateCustomerModal = ({isOpen, onClose, overlay, fetchCustomers, customer
 
     const [submitting, setSubmitting] = useState(false)
 
-    const [nameActive, setNameActive] = useState(false)
-    const [emailActive, setEmailActive] = useState(false)
     const [invalid, setInValid] = useState(true)
 
     const setActive = (val) => {
@@ -69,7 +66,7 @@ const UpdateCustomerModal = ({isOpen, onClose, overlay, fetchCustomers, customer
     }
 
     useEffect(() => {
-      if(isValidEmail(values.email) && (values.name != "")) setInValid(false)
+      if(isValidEmail(values.email)) setInValid(false)
       else setInValid(true)
     }, [values.name, values.email])
  
@@ -85,27 +82,21 @@ const UpdateCustomerModal = ({isOpen, onClose, overlay, fetchCustomers, customer
             <ModalHeader>Update your account</ModalHeader>
             <ModalCloseButton />
             <ModalBody pb={6}>
-                <FormControl isRequired isInvalid={values.name.length == 0 && nameActive}>
+                <FormControl>
                     <FormLabel>Full name</FormLabel>
                     <Input placeholder={customer.name} value={values.name} 
                     onChange={(e) => setname(e)} onClick={() => setActive("name")}/>
-                    {(values.name.length == 0 && nameActive) ?(
-                      <FormErrorMessage>
-                        Name is required
-                      </FormErrorMessage>
-                    ) : ''}
                 </FormControl>
 
-                <FormControl mt={4} isRequired isInvalid={values.email.length == 0 && emailActive}>
+                <FormControl mt={4}>
                     <FormLabel>Email</FormLabel>
                     <Input placeholder={customer.email}  type='email' value={values.email} 
+                 
+                    focusBorderColor={invalid ? 'crimson' : 'blue.400'}
                     onChange={(e) => setemail(e)} onClick={() => setActive("email")}/>
                        <p style={errorStyle}>
                         {error}
                       </p>
-                 
-                      
-                    
                 </FormControl>
                 <FormControl mt={4}>
                     <FormLabel>Age</FormLabel>
@@ -121,7 +112,7 @@ const UpdateCustomerModal = ({isOpen, onClose, overlay, fetchCustomers, customer
                 
                 <FormControl mt={4}>
                     <FormLabel>Gender</FormLabel>
-                    <RadioGroup onChange={(val) => setgender(val)} value={values.gender}>
+                    <RadioGroup onChange={(val) => setgender(val)} value={values.gender} defaultValue='0'>
                         <Stack direction='row'>
                             <Radio value='0'>Male</Radio>
                             <Radio value='1'>Female</Radio>
@@ -133,20 +124,20 @@ const UpdateCustomerModal = ({isOpen, onClose, overlay, fetchCustomers, customer
                     <Button colorScheme='blue' type='submit'
                     isDisabled={invalid} onClick={() => {
                      setSubmitting(true)
-                      updateCustomer(values)
+                      updateCustomer(customer.id, values)
                         .then(res => {
                            successNotification(
                             "Customer updated successfully",
                              `${values.name} is added`
                            )
-                            fetchCustomers()
+                            setSubmitting(false)
+                            onClose()
+                            fetchCustomers()  
                         }).catch((err) => {
                           errorNotification(
                             "An error occured while updating the customer"
                            )
-                        }).finally(() => {
-                          setSubmitting(false)
-                          onClose()
+                           console.log(err)
                         })
                     }}>Submit</Button>
                 </Flex>
