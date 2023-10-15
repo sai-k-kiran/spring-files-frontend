@@ -1,6 +1,21 @@
 .App{
-    width: 100vw;
-    height: 100vh;
     margin: 0;
-    padding: 0;
+}
+
+.outer {
+    display: table;
+    width: 100vw;
+    height: 100vh
+}
+
+.inner {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.center {
+    display: inline-block;
+    text-align: left;
+    padding : 20px;
 }

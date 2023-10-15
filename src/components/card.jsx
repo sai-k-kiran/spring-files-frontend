@@ -46,9 +46,7 @@ import { UpdateCustomerModal } from '../components/UpdateCustomerModal'
         boxShadow={'2xl'}
         padding={4}>
         <Flex flex={1} bg="blue.200">
-          <Image
-            objectFit="cover"
-            boxSize="100%"
+        <Image objectFit="cover" boxSize="100%"
             src={
               'https://media-cldnry.s-nbcnews.com/image/upload/t_fit-1240w,f_auto,q_auto:best/rockcms/2023-03/230315-leonardo-da-vinci-mb-0816-fe9673.jpg'
             }

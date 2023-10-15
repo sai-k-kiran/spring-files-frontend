@@ -24,20 +24,28 @@ const App = () => {
   }, [])
 
   if(loading){
-    return(
-      <Spinner
-          thickness='4px'
-          speed='0.65s'
-          emptyColor='gray.200'
-          color='blue.500'
-          size='xl'
-        />
+    return (
+      <div className='outer'>
+        <div className='inner'>
+          <div className='center'>
+            <Spinner
+              thickness='12px'
+              speed='0.65s'
+              emptyColor='transparent'
+              color='rgb(49, 151, 149)'
+              height='200px'
+              width='200px'
+            />
+          </div>
+        </div>
+      </div>
     )
   }
+
   
   return(
     <div className = "App">
-       <Sidebar customer={customers} fetchCustomers={fetchCustomers}/>
+       <Sidebar customer={customers} fetchCustomers={fetchCustomers} loading={loading}/>
     </div>
   )
 }

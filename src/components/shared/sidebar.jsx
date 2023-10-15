@@ -15,12 +15,14 @@ import {
   Stack,
   Wrap,
   WrapItem,
-  Text
+  Text,
+  SkeletonText,
+  SkeletonCircle
 } from '@chakra-ui/react'
 import { HamburgerIcon, CloseIcon, AddIcon } from '@chakra-ui/icons'
 import Card from '../card'
 import CreateCustomerModal from '../CreateCustomerModal'
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 
 const Links = ['Dashboard', 'Projects', 'Team']
 
@@ -45,7 +47,7 @@ const NavLink = ({children}) => {
 export default function Sidebar({customer, fetchCustomers}) {
   
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [overlay, setOverlay] = useState(false)
+  const [overlay, setOverlay] = useState(false) 
 
   return (
     <>
@@ -120,7 +122,7 @@ export default function Sidebar({customer, fetchCustomers}) {
           {customer.length == 0 ? <Text>No customers available</Text> : ""}
           {customer.length != 0 && customer.map((c) => (
               <WrapItem key={c.id}>
-                <Card customer={c} fetchCustomers={fetchCustomers}/>
+                  <Card customer={c} fetchCustomers={fetchCustomers}/>
               </WrapItem>
             ))}
         </Wrap>
