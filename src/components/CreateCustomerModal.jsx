@@ -24,7 +24,7 @@ import { saveCustomer } from '../services/client';
 import { successNotification, errorNotification } from '../services/Notification';
 
 const CreateCustomerModal = ({isOpen, onClose, overlay, fetchCustomers}) => {
-    const [values, setValues] = useState({name : "", email : "", age : 10, gender : ''})
+    const [values, setValues] = useState({name : "", email : "", age : 10, gender : '', password: ""})
     const [error, setError] = useState(null);
 
     function isValidEmail(email) {
@@ -69,7 +69,8 @@ const CreateCustomerModal = ({isOpen, onClose, overlay, fetchCustomers}) => {
     }
 
     useEffect(() => {
-      if(values.name != "" && values.email != "" && isValidEmail(values.email)) setInValid(false)
+      if(values.password != "" && values.name != "" && values.email != "" && isValidEmail(values.email)) 
+          setInValid(false)
       else setInValid(true)
     }, [values.name, values.email])
  
@@ -108,8 +109,11 @@ const CreateCustomerModal = ({isOpen, onClose, overlay, fetchCustomers}) => {
                         Email is required
                       </FormErrorMessage>
                     ) : ''}
-                      
-                    
+                </FormControl>
+                <FormControl mt={4} isRequired>
+                    <FormLabel>Password</FormLabel>
+                    <Input placeholder='Password' type='email' value={values.password} 
+                    onChange={(e) => setValues((values) => ({...values, password : e.target.value}))} />
                 </FormControl>
                 <FormControl mt={4}>
                     <FormLabel>Age</FormLabel>
@@ -139,6 +143,7 @@ const CreateCustomerModal = ({isOpen, onClose, overlay, fetchCustomers}) => {
                      setSubmitting(true)
                       saveCustomer(values)
                         .then(res => {
+                          onClose()
                            successNotification(
                             "Customer created successfully",
                              `${values.name} is added`
@@ -151,7 +156,6 @@ const CreateCustomerModal = ({isOpen, onClose, overlay, fetchCustomers}) => {
                            )
                         }).finally(() => {
                           setSubmitting(false)
-                          onClose()
                         })
                       console.log(JSON.stringify(values))
                     }}>Submit</Button>

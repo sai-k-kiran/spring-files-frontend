@@ -23,6 +23,8 @@ import { HamburgerIcon, CloseIcon, AddIcon } from '@chakra-ui/icons'
 import Card from '../card'
 import CreateCustomerModal from '../CreateCustomerModal'
 import { useState } from 'react'
+import { useAuth } from '../context/authContext'
+import {useNavigate} from 'react-router-dom'
 
 const Links = ['Dashboard', 'Projects', 'Team']
 
@@ -48,6 +50,10 @@ export default function Sidebar({customer, fetchCustomers}) {
   
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [overlay, setOverlay] = useState(false) 
+  const navigate = useNavigate()
+  const {user, logOut} = useAuth()
+  const currUser = JSON.parse(localStorage.getItem("user"))
+  console.log(typeof currUser)
 
   return (
     <>
@@ -97,10 +103,16 @@ export default function Sidebar({customer, fetchCustomers}) {
                 />
               </MenuButton>
               <MenuList>
-                <MenuItem>Link 1</MenuItem>
+                <MenuItem>{currUser.name}</MenuItem>
                 <MenuItem>Link 2</MenuItem>
                 <MenuDivider />
-                <MenuItem>Link 3</MenuItem>
+                <MenuItem onClick={() => {
+                  logOut()
+                  localStorage.removeItem("user")
+                  navigate("/")
+                }}>
+                  Log Out
+                </MenuItem>
               </MenuList>
             </Menu>
           </Flex>

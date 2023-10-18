@@ -8,7 +8,8 @@ const Toast = (title, desc, status) => {
         desc,
         status,
         isClosable : true,
-        duration: 4000
+        duration: 4000,
+        variant: 'top-accent'
     })
 }
 
