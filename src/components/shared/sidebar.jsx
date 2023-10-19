@@ -50,10 +50,8 @@ export default function Sidebar({customer, fetchCustomers}) {
   
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [overlay, setOverlay] = useState(false) 
-  const navigate = useNavigate()
   const {user, logOut} = useAuth()
-  const currUser = JSON.parse(localStorage.getItem("user"))
-  console.log(typeof currUser)
+  console.log(user.name)
 
   return (
     <>
@@ -103,13 +101,12 @@ export default function Sidebar({customer, fetchCustomers}) {
                 />
               </MenuButton>
               <MenuList>
-                <MenuItem>{currUser.name}</MenuItem>
+                <MenuItem>{user.name}</MenuItem>
                 <MenuItem>Link 2</MenuItem>
                 <MenuDivider />
                 <MenuItem onClick={() => {
                   logOut()
                   localStorage.removeItem("user")
-                  navigate("/")
                 }}>
                   Log Out
                 </MenuItem>

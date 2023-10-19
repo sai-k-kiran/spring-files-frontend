@@ -6,6 +6,8 @@ import { ChakraProvider } from '@chakra-ui/react'
 import { createStandaloneToast } from '@chakra-ui/react'
 import Login from './components/Auth/login.jsx'
 import AuthProvider from './components/context/authContext.jsx'
+import ProtectedRoutes from './components/shared/ProtectedRoutes.jsx'
+import Register from './components/Auth/register.jsx'
 const {ToastContainer} = createStandaloneToast()
 
 const router = createBrowserRouter([
@@ -15,7 +17,13 @@ const router = createBrowserRouter([
   },
   {
     path: "dashboard",
-    element: <App />
+    element: <ProtectedRoutes>
+      <App />
+    </ProtectedRoutes>
+  },
+  {
+    path: "/register",
+    element: <Register />
   }
 ])
 

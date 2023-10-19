@@ -157,7 +157,6 @@ const CreateCustomerModal = ({isOpen, onClose, overlay, fetchCustomers}) => {
                         }).finally(() => {
                           setSubmitting(false)
                         })
-                      console.log(JSON.stringify(values))
                     }}>Submit</Button>
                 </Flex>
                 </FormControl>

@@ -18,8 +18,12 @@ import { useAuth } from '../context/authContext';
 import { errorNotification } from '../../services/Notification';
 
 export default function Login() {
-    const {login} = useAuth()
+    const {user, login} = useAuth()
     const navigate = useNavigate()
+
+    useEffect(() => {
+      if(user != null) navigate("/dashboard")
+    })
 
     const [values, setValues] = useState({username : "", password: ""})
     const [invalid, setInValid] = useState(true)
@@ -84,14 +88,17 @@ export default function Login() {
               <Input type="password" value={values.password} 
               onChange={(e) => setPassword(e)}/>
             </FormControl>
-            <Stack spacing={10}>
+            <Stack spacing={4}>
               <Stack
                 direction={{ base: 'column', sm: 'row' }}
                 align={'start'}
                 justify={'space-between'}>
                 <Checkbox>Remember me</Checkbox>
-              
               </Stack>  
+              <Button fontSize={'m'} color={'blue.400'} align={'center'} bg={'transparent'}
+                  onClick={() => {navigate("/register")}}>
+                 Create an account     
+              </Button>
               <Button
               isDisabled={invalid} bg={'blue.400'} color={'white'}
                 _hover={{
