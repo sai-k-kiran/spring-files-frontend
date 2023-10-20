@@ -72,7 +72,7 @@ const CreateCustomerModal = ({isOpen, onClose, overlay, fetchCustomers}) => {
       if(values.password != "" && values.name != "" && values.email != "" && isValidEmail(values.email)) 
           setInValid(false)
       else setInValid(true)
-    }, [values.name, values.email])
+    }, [values.name, values.email, values.password])
  
     return (
       <>

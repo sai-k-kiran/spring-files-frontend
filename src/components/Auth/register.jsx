@@ -150,7 +150,11 @@ import {
                         </Stack>
                     </RadioGroup>
                 </FormControl>
-              <Stack mt={4}>
+                <Button fontSize={'m'} color={'blue.400'} align={'center'} bg={'transparent'}
+                  onClick={() => {navigate("/")}}>
+                 Login in to account   
+              </Button>
+              <Stack mt={2}>
                 <Button
                 isDisabled={invalid} bg={'blue.400'} color={'white'}
                   _hover={{

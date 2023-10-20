@@ -109,8 +109,15 @@ export default function Login() {
                     login(values).then(res => {
                         navigate("/dashboard")                    
                     }).catch(err => {
+                      (err.response.data.statusCode == 401) ? 
+                      errorNotification(
+                        "Username or Password wrong",
+                        err.message
+                        ) : ""
                         console.log(err.response.data)
-                    }).finally(() => setSubmitting(false))
+                    }).finally(() => {
+                      setSubmitting(false)
+                    })
                 }}
                 >
                 Sign in
